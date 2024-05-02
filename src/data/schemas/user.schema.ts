@@ -8,5 +8,22 @@ export class User {
   username: string;
   @Prop()
   password: string;
+  @Prop()
+  email: string;
+  @Prop()
+  role: string;
+  @Prop()
+  createdAt: Date;
+  @Prop()
+  updatedAt: Date;
+  @Prop()
+  changePasswordAt: Date;
+  @Prop()
+  passwordResetToken: string;
+  @Prop()
+  passwordResetExpires: Date;
+  @Prop()
+  active: boolean;
+
 }
 export const UserSchema = SchemaFactory.createForClass(User);
