@@ -8,19 +8,26 @@ import { Observable } from 'rxjs';
 import { JwtStrategy } from 'src/user/strategy/jwt.strategy';
 import { JwtPayload } from '../data/interfaces/jwt-payload.interface';
 import { AuthService } from './auth.service';
+import { Reflector } from '@nestjs/core';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly jwtStrategy: JwtStrategy,
     private readonly authService: AuthService,
+    private readonly reflector: Reflector,
   ) {}
 
   async canActivate(
     context: ExecutionContext,
   ): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
+    // check if the route is public
+    const isPublic = this.reflector.get<boolean>('isPublic', context.getHandler());
+    if (isPublic) return true;
+    // get token from header or query params
     const isTokenExist = request.headers.authorization?.startsWith('Bearer');
+    // check if the token exists
     if (!isTokenExist) {
       throw new UnauthorizedException(
         {
