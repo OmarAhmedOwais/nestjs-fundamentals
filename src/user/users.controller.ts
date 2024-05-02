@@ -8,12 +8,12 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
-  SetMetadata,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { User } from 'src/data/schemas/user.schema';
+import { Public } from 'src/common/decorators/public.decorator';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -23,8 +23,8 @@ export class UsersController {
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.create(createUserDto);
   }
-  @SetMetadata('isPublic', true)
   @Get()
+  @Public()
   @HttpCode(HttpStatus.FOUND)
   async findAll(): Promise<User[]> {
     return this.usersService.findAll();
